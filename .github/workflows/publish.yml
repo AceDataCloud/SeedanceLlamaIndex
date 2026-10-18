@@ -1,15 +1,14 @@
-name: Publish reviewed release to PyPI
+name: Publish reviewed release
 on:
   release:
     types: [published]
 permissions:
   contents: read
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
-    environment: pypi
     permissions:
-      id-token: write
+      contents: write
     steps:
       - uses: actions/checkout@v6
         with:
@@ -18,4 +17,24 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[dev]" && pytest && python -m build && twine check dist/*
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Preserve installable GitHub release assets before registry publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" dist/* --repo "${{ github.repository }}" --clobber
+      - uses: actions/upload-artifact@v7
+        with:
+          name: package-distributions
+          path: dist/*
+  publish-pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: package-distributions
+          path: dist/
+      - name: Publish using the existing authorized organization identity
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
