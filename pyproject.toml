@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llama-index-tools-seedance-acedatacloud"
+version = "0.1.0"
+description = "Seedance by Ace Data Cloud: native LlamaIndex video generation and task retrieval tools"
+readme = "README.md"
+requires-python = ">=3.10,<4"
+license = "MIT"
+authors = [{name = "Ace Data Cloud", email = "dev@acedata.cloud"}]
+keywords = ["llamaindex", "llama-index", "seedance", "video", "media", "acedatacloud"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Multimedia :: Video",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = ["acedatacloud>=2026.10.12.0", "llama-index-core>=0.14.25,<0.15"]
+
+[project.urls]
+Homepage = "https://github.com/AceDataCloud/SeedanceLlamaIndex"
+Documentation = "https://github.com/AceDataCloud/SeedanceLlamaIndex#readme"
+Repository = "https://github.com/AceDataCloud/SeedanceLlamaIndex"
+Issues = "https://github.com/AceDataCloud/SeedanceLlamaIndex/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "pytest-cov>=6", "respx>=0.22", "ruff>=0.11", "build>=1.2", "twine>=6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["llama_index"]
+
+[tool.hatch.build.targets.sdist]
+include = ["llama_index/", "tests/", "examples/", "readme/", "docs/", "README.md", "LICENSE", "pyproject.toml"]
+
+[tool.llamahub]
+contains_example = true
+import_path = "llama_index.tools.seedance_acedatacloud"
+
+[tool.llamahub.class_authors]
+SeedanceToolSpec = "acedatacloud-dev"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
