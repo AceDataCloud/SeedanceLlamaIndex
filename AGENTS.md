@@ -1,0 +1,3 @@
+# SeedanceLlamaIndex
+
+Owns the independently maintained native Seedance ToolSpec. Reuse published Ace SDK, no shared-source edits. Model/cost inputs explicit; no fallback or retries. Only query the same task ID, never submit on polling. Pending previews are not final URLs; task/result normalization follows service contract in docs/contracts.json. No credentials in schema/output/Git. Run normal pytest discovery, Ruff, build/twine, separate wheel consumer on Python3.10/3.12. All tests mock HTTP; no paid calls. Bot PR and isolated checkout rules apply; no merge/deploy without explicit authorization.
