@@ -13,11 +13,13 @@ by `FunctionAgent`, without an MCP address or hand-written HTTP wrapper:
 ## 1. Install the correct native package
 
 Python 3.10+. Standard package **`llama-index-tools-seedance-acedatacloud`**, import `seedance_acedatacloud`.
-**Publication status: source review; not yet published to PyPI or approved in an official directory.**
-Use the source PR/commit or its CI wheel until a real release is available:
+**Source is merged; release distribution: [GitHub v0.1.0](https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/tag/v0.1.0).**
+PyPI publication is pending the shared new-project quota; an official LlamaIndex
+listing is not yet approved. Install the wheel from the GitHub release after
+checking that the release assets are present:
 
 ```bash
-pip install "llama-index-tools-seedance-acedatacloud @ git+https://github.com/AceDataCloud/SeedanceLlamaIndex.git@codex/native-seedance-tools"
+python -m pip install "https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/download/v0.1.0/llama_index_tools_seedance_acedatacloud-0.1.0-py3-none-any.whl"
 ```
 
 This package reuses the released Ace SDK, with fixed API base and retries disabled.
@@ -141,7 +143,7 @@ media/billing receipt. The package does not synthesize a final text answer.
 
 | Symptom | What to do |
 |---|---|
-| Package absent on PyPI | Initial publication is pending; install the PR/CI wheel for review. |
+| Package absent on PyPI | Use the GitHub release wheel while PyPI quota is pending. |
 | Missing key / 401 | Recopy raw application token; check expiry, API restrictions and service access. |
 | 403 or balance error | Check the exact service/model entitlement and budget, not repeated generation. |
 | 429 / network timeout | No retries; inspect whether the task was accepted before another submission. |
@@ -151,12 +153,11 @@ media/billing receipt. The package does not synthesize a final text answer.
 
 ## Release and official discovery
 
-Prepared PyPI Trusted Publisher: existing authorized PyPI owner configures project
-`llama-index-tools-seedance-acedatacloud`, owner `AceDataCloud`, repo `SeedanceLlamaIndex`, workflow `publish.yml`, environment `pypi`.
-Human review/merge/release authorization is still required. No new identities or
-terms acceptance are performed. After publishing, verify public wheel bytes and a
-clean pip install. Source PR, package release, official listing and real task/bill
-are separate stages. Official documentation discovery is coordinated via
+The existing authorized organization publisher is reused; no new account or
+Trusted Publisher setup is required for this token path. PyPI publication is
+pending the shared new-project quota. GitHub wheel/sdist assets are published
+independently. See [release and retry details](docs/distribution.md).
+Official documentation discovery is coordinated via
 https://github.com/run-llama/llama_index/pull/23574 ; draft is not approved inclusion.
 
 MIT. Seedance names identify the supported service; Ace Data Cloud maintains this integration.

@@ -1,21 +1,49 @@
-name: Publish reviewed release to PyPI
+name: Publish reviewed release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish after registry quota is available
+        required: true
+        type: string
 permissions:
   contents: read
 jobs:
-  publish:
+  build:
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
-    environment: pypi
     permissions:
-      id-token: write
+      contents: write
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - run: pip install -e ".[dev]" && pytest && python -m build && twine check dist/*
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Preserve installable GitHub release assets before registry publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name || inputs.tag }}" dist/* --repo "${{ github.repository }}"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: package-distributions
+          path: dist/*
+  publish-pypi:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - name: Download the existing release assets without rebuilding or overwriting
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${{ inputs.tag }}" --repo "${{ github.repository }}" --pattern "*.whl" --pattern "*.tar.gz" --dir dist
+          test "$(find dist -type f | wc -l | tr -d ' ')" = 2
+      - name: Publish using the existing authorized organization identity
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
