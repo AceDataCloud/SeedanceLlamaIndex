@@ -45,14 +45,6 @@ def _submitted(task_id: str) -> dict[str, Any]:
     }
 
 
-def _task_id(raw: dict[str, Any]) -> str:
-    value = raw.get("task_id") or raw.get("id")
-    data = raw.get("data")
-    if not value and isinstance(data, dict):
-        value = data.get("task_id")
-    return str(value or "")
-
-
 def _result(task_id: str, raw: dict[str, Any]) -> dict[str, Any]:
     if not raw:
         return {
@@ -80,13 +72,11 @@ def _result(task_id: str, raw: dict[str, Any]) -> dict[str, Any]:
         if isinstance(node, dict)
         for key in ("state", "status")
     }
-    if False and raw.get("finished_at") is None:
-        status, success = "pending", None
-    elif words & _FAILED or response.get("success") is False or response.get("error"):
+    if words & _FAILED or response.get("success") is False or response.get("error"):
         status, success = "failed", False
     elif words & _PENDING:
         status, success = "pending", None
-    elif response.get("success") is True or words & _DONE or (False and raw.get("finished_at") is not None):
+    elif response.get("success") is True or words & _DONE:
         status, success = "succeeded", True
     else:
         status, success = "pending", None
@@ -144,6 +134,8 @@ class SeedanceToolSpec(BaseToolSpec):
     ) -> dict[str, Any]:
         """Submit Seedance text-to-video once. Consumes credits; poll the returned ID, never resubmit."""
         prompt, model = _required(prompt, "prompt"), _required(model, "model")
+        if "lite-i2v" in model:
+            raise ValueError("This model requires an image input")
         if not isinstance(duration, int) or isinstance(duration, bool):
             raise ValueError("duration must be an integer number of seconds")
         maximum = 30 if "2-5" in model else 15 if "2-0" in model else 12
@@ -173,6 +165,8 @@ class SeedanceToolSpec(BaseToolSpec):
     ) -> dict[str, Any]:
         """Submit Seedance text-to-video once. Consumes credits; poll the returned ID, never resubmit."""
         prompt, model = _required(prompt, "prompt"), _required(model, "model")
+        if "lite-i2v" in model:
+            raise ValueError("This model requires an image input")
         if not isinstance(duration, int) or isinstance(duration, bool):
             raise ValueError("duration must be an integer number of seconds")
         maximum = 30 if "2-5" in model else 15 if "2-0" in model else 12
@@ -202,6 +196,8 @@ class SeedanceToolSpec(BaseToolSpec):
     ) -> dict[str, Any]:
         """Submit Seedance first-frame image animation once. Consumes credits; poll the returned ID, never resubmit."""
         prompt, model = _required(prompt, "prompt"), _required(model, "model")
+        if "lite-t2v" in model:
+            raise ValueError("This model supports text input, not first-frame animation")
         if not isinstance(duration, int) or isinstance(duration, bool):
             raise ValueError("duration must be an integer number of seconds")
         maximum = 30 if "2-5" in model else 15 if "2-0" in model else 12
@@ -234,6 +230,8 @@ class SeedanceToolSpec(BaseToolSpec):
     ) -> dict[str, Any]:
         """Submit Seedance first-frame image animation once. Consumes credits; poll the returned ID, never resubmit."""
         prompt, model = _required(prompt, "prompt"), _required(model, "model")
+        if "lite-t2v" in model:
+            raise ValueError("This model supports text input, not first-frame animation")
         if not isinstance(duration, int) or isinstance(duration, bool):
             raise ValueError("duration must be an integer number of seconds")
         maximum = 30 if "2-5" in model else 15 if "2-0" in model else 12

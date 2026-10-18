@@ -271,3 +271,31 @@ async def test_invalid_service_options_never_submit(spec, override):
         with pytest.raises(ValueError):
             getattr(spec, GEN)(**{**KWARGS, **override})
         assert not router.calls
+
+
+async def test_documented_data_object_and_deduplicated_final_urls(spec):
+    with respx.mock(assert_all_mocked=True) as router:
+        record = completed()
+        record["response"]["data"] = {KEY: "https://example.org/documented." + EXT, "status": "succeeded"}
+        route = router.post(BASE + TASK).respond(200, json=record)
+        result = getattr(spec, QUERY)("old-task")
+        assert result["media_urls"] == ["https://example.org/documented." + EXT]
+        record["response"]["data"] = [record["response"]["data"], record["response"]["data"]]
+        route.respond(200, json=record)
+        assert getattr(spec, QUERY)("old-task")["media_urls"] == result["media_urls"]
+
+
+@pytest.mark.parametrize("async_", [False, True])
+async def test_seedance_lite_model_input_mode_must_match(spec, async_):
+    with respx.mock(assert_all_mocked=True) as router:
+        if async_:
+            with pytest.raises(ValueError, match="requires an image"):
+                await getattr(spec, "a" + GEN)(**{**KWARGS, "model": "doubao-seedance-1-0-lite-i2v-250428"})
+            with pytest.raises(ValueError, match="text input"):
+                await getattr(spec, "a" + EDIT)(**{**EDIT_KWARGS, "model": "doubao-seedance-1-0-lite-t2v-250428"})
+        else:
+            with pytest.raises(ValueError, match="requires an image"):
+                getattr(spec, GEN)(**{**KWARGS, "model": "doubao-seedance-1-0-lite-i2v-250428"})
+            with pytest.raises(ValueError, match="text input"):
+                getattr(spec, EDIT)(**{**EDIT_KWARGS, "model": "doubao-seedance-1-0-lite-t2v-250428"})
+        assert not router.calls

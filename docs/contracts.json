@@ -17,5 +17,7 @@
   "sources": [
     "https://github.com/AceDataCloud/MCPs/tree/4a2abb23a6f19ea8460c4883dabb5ad378a428b7/seedance",
     "https://github.com/AceDataCloud/PlatformBackend/tree/f288eb461f15d057e9f5cedd634ce1e5c4959552/docs"
-  ]
+  ],
+  "input_modes": "lite-i2v requires first-frame input; lite-t2v cannot be used for first-frame animation; no model substitution",
+  "response_shape": "data may be an object; normalize object/list; preserve outer Ace task ID, never replace with provider data.task_id"
 }
