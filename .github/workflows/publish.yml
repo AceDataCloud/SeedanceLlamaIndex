@@ -12,6 +12,7 @@ permissions:
   contents: read
 jobs:
   build:
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -26,21 +27,22 @@ jobs:
       - name: Preserve installable GitHub release assets before registry publication
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ github.event.release.tag_name || inputs.tag }}" dist/* --repo "${{ github.repository }}" --clobber
+        run: gh release upload "${{ github.event.release.tag_name || inputs.tag }}" dist/* --repo "${{ github.repository }}"
       - uses: actions/upload-artifact@v7
         with:
           name: package-distributions
           path: dist/*
   publish-pypi:
     if: github.event_name == 'workflow_dispatch'
-    needs: build
     runs-on: ubuntu-latest
     environment: pypi
     steps:
-      - uses: actions/download-artifact@v8
-        with:
-          name: package-distributions
-          path: dist/
+      - name: Download the existing release assets without rebuilding or overwriting
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "${{ inputs.tag }}" --repo "${{ github.repository }}" --pattern "*.whl" --pattern "*.tar.gz" --dir dist
+          test "$(find dist -type f | wc -l | tr -d ' ')" = 2
       - name: Publish using the existing authorized organization identity
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
