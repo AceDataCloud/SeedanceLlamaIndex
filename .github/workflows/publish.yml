@@ -2,6 +2,12 @@ name: Publish reviewed release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to publish after registry quota is available
+        required: true
+        type: string
 permissions:
   contents: read
 jobs:
@@ -12,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -20,12 +26,13 @@ jobs:
       - name: Preserve installable GitHub release assets before registry publication
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ github.event.release.tag_name }}" dist/* --repo "${{ github.repository }}" --clobber
+        run: gh release upload "${{ github.event.release.tag_name || inputs.tag }}" dist/* --repo "${{ github.repository }}" --clobber
       - uses: actions/upload-artifact@v7
         with:
           name: package-distributions
           path: dist/*
   publish-pypi:
+    if: github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-latest
     environment: pypi
