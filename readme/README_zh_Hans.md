@@ -8,11 +8,14 @@ Ace Data Cloud 独立维护的单服务集成，不是 Seedance 或 LlamaIndex �
 
 ## 1. 安装
 
-包名 `llama-index-tools-seedance-acedatacloud`，Python 3.10+。源码已合并，GitHub v0.1.0 发行入口：https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/tag/v0.1.0 。PyPI受共享新项目额度限制，官方收录仍待审。
+**PyPI 0.1.0 已发布**：[正式页面](https://pypi.org/project/llama-index-tools-seedance-acedatacloud/0.1.0/)。Python 3.10+，包名 `llama-index-tools-seedance-acedatacloud`；官方收录仍待审。
 
 ```bash
-python -m pip install "https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/download/v0.1.0/llama_index_tools_seedance_acedatacloud-0.1.0-py3-none-any.whl"
+python -m pip install "llama-index-tools-seedance-acedatacloud==0.1.0"
 ```
+
+[GitHub v0.1.0](https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/tag/v0.1.0) 提供同字节 wheel/sdist 备用。
+2026-11-15 已核官方 PyPI 双工件哈希，并用全新 Python3.12 消费者检查原生工具 schema 和依赖，无 API 请求。
 
 ## 2. 注册、登录、General application 与 Token
 
@@ -90,11 +93,11 @@ python -m build
 真实 LlamaIndex 工具/SDK 使用模拟HTTP、假ID和媒体链接。独立wheel新环境验证提交、
 新实例恢复同任务查询；不发新收费请求、不证明终态媒体/账单或营收，也不生成最终文字回答。
 
-常见问题：PyPI找不到先用GitHub正式wheel；401重查raw Key/有效期/权限；403查余额和模型准入；
+常见问题：安装失败先核包名、Python3.10+ 与 PyPI/CDN 网络，GitHub wheel 可备用；401重查raw Key/有效期/权限；403查余额和模型准入；
 429/超时禁自动重提；pending等15秒查同ID；not_found重核ID与归属，知道别人的ID不等于有权限。
 
 ## 发版门槛
 
-现有组织PYPI_TOKEN已确认可用，不需要新账号或另配Trusted Publisher。当前PyPI门槛为共享账号/IP新建项目额度，已知重置时间2026-10-20 03:23:23（北京时间）；发行GitHub wheel与它分开。管理员届时先读registry，再对既有v0.1.0标签手动执行publish.yml发布，不换身份/IP。官方收录单独验收；
+现有发布身份已完成 PyPI 0.1.0 发布，安装不需要新账号或扩权。已发行 wheel/sdist 与 PyPI 长描述保留原始快照，当前仓库文档修正历史“未发布”措辞；不覆盖成功版本。后续版本走正常评审与发行流程；官方收录仍单独验收。
 官方发现文档草稿：https://github.com/run-llama/llama_index/pull/23574 ，投稿不是获准收录。
 不自动创建身份、接受协议或扩权。

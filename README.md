@@ -13,14 +13,18 @@ by `FunctionAgent`, without an MCP address or hand-written HTTP wrapper:
 ## 1. Install the correct native package
 
 Python 3.10+. Standard package **`llama-index-tools-seedance-acedatacloud`**, import `seedance_acedatacloud`.
-**Source is merged; release distribution: [GitHub v0.1.0](https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/tag/v0.1.0).**
-PyPI publication is pending the shared new-project quota; an official LlamaIndex
-listing is not yet approved. Install the wheel from the GitHub release after
-checking that the release assets are present:
+**Published on PyPI: [0.1.0](https://pypi.org/project/llama-index-tools-seedance-acedatacloud/0.1.0/).**
+Install the ordinary package name:
 
 ```bash
-python -m pip install "https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/download/v0.1.0/llama_index_tools_seedance_acedatacloud-0.1.0-py3-none-any.whl"
+python -m pip install "llama-index-tools-seedance-acedatacloud==0.1.0"
 ```
+
+The [GitHub v0.1.0 release](https://github.com/AceDataCloud/SeedanceLlamaIndex/releases/tag/v0.1.0)
+provides the same wheel and source archive as an alternate distribution. On
+2026-11-15, both PyPI file digests matched those original assets and a fresh
+Python 3.12 consumer checked the native tool schemas without an API request.
+Official LlamaIndex listing remains subject to maintainer review.
 
 This package reuses the released Ace SDK, with fixed API base and retries disabled.
 It does not modify the shared SDK/MCP repositories. [Official ToolSpec pattern](https://developers.llamaindex.ai/python/framework/module_guides/deploying/agents/tools/).
@@ -143,7 +147,7 @@ media/billing receipt. The package does not synthesize a final text answer.
 
 | Symptom | What to do |
 |---|---|
-| Package absent on PyPI | Use the GitHub release wheel while PyPI quota is pending. |
+| Package installation fails | Use the exact name above, Python 3.10+ and a reachable PyPI/CDN connection; the GitHub wheel is an alternative. |
 | Missing key / 401 | Recopy raw application token; check expiry, API restrictions and service access. |
 | 403 or balance error | Check the exact service/model entitlement and budget, not repeated generation. |
 | 429 / network timeout | No retries; inspect whether the task was accepted before another submission. |
@@ -153,11 +157,12 @@ media/billing receipt. The package does not synthesize a final text answer.
 
 ## Release and official discovery
 
-The existing authorized organization publisher is reused; no new account or
-Trusted Publisher setup is required for this token path. PyPI publication is
-pending the shared new-project quota. GitHub wheel/sdist assets are published
-independently. See [release and retry details](docs/distribution.md).
+Version 0.1.0 is published on PyPI using the existing authorized publisher;
+no new account or publisher configuration is needed to install it. See
+[distribution details](docs/distribution.md). The original wheel/sdist and their
+PyPI long description remain immutable; this repository documentation corrects
+their historical publication status.
 Official documentation discovery is coordinated via
-https://github.com/run-llama/llama_index/pull/23574 ; draft is not approved inclusion.
+https://github.com/run-llama/llama_index/pull/23574 ; submission is not approved inclusion.
 
 MIT. Seedance names identify the supported service; Ace Data Cloud maintains this integration.
