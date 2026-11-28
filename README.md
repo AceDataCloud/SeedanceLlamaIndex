@@ -32,8 +32,8 @@ It does not modify the shared SDK/MCP repositories. [Official ToolSpec pattern](
 ## 2. Register/sign in and get the application API Token
 
 1. [Register or sign in to Ace Data Cloud](https://platform.acedata.cloud?utm_source=llamaindex&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_llamaindex_register).
-2. Open [Applications](https://platform.acedata.cloud/console/applications?utm_source=llamaindex&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_llamaindex_api_key). Find **General application**;
-   if absent, click **Initialize General Application**. Its key uses only the services
+2. Open [Applications](https://platform.acedata.cloud/console/applications?utm_source=llamaindex&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_llamaindex_api_key). Find **General application**.
+   Its key uses only the services
    permitted for your account; a dedicated application's key is service-limited.
 3. Copy an API Key, or choose **Manage Keys → Create** for a separate `LlamaIndex Seedance` key.
    Check model availability, service access, balance and [current pricing](https://platform.acedata.cloud/models?utm_source=llamaindex&utm_medium=referral&utm_campaign=evergreen&utm_content=seedance_llamaindex_balance) before generating.
